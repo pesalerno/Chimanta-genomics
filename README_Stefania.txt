@@ -178,11 +178,51 @@ TNHC05833_CTGCG-CGATGT.fq
 > python rename_barcodes_final.py './' '*.fq' 'barcodes.txt'
 
 
-*****************************************************************************************
-*																						*
-*						2. READ COUNTS AND QUALITY CHECKS								*
-*																						*
-*****************************************************************************************
+*****************************************************************
+*																*
+*				2. READ COUNTS AND QUALITY CHECKS				*
+*																*
+*****************************************************************
+
+###1. GET TOTAL NUMBER OF READS PER INDIVIDUAL AFTER INITIAL FILTER IN process_radtags
+
+####Run entire script in terminal in folder with all processed reads:
+
+echo -e 'SAMPLE_ID_FULL\tNUM_READS'
+
+for file in *.fq
+
+do
+	echo -n $(basename $file .fq)$'\t'
+	cat $file | grep '^@.*' | wc -l
+done
+ 
+###this will print to screen sample ID (tab) number of reads. save to a file
+
+#file1: read-counts-Stefania.txt
+=======> NEED TO ADD READ COUNTS FOR PRELIMINARY STEFANIA LIBRARY
+
+***********************************************
+***********************************************
+###get plot of number of reads per individual in R and get mean and median number of reads
+
+##########code in R if importing only the reads files:
+
+reads <- read.table("read-counts-Stefania.txt")
+readsmatrix <- as.data.frame(reads)
+readsmatrix
+mean(readsmatrix$V2)
+##result: [1] 841618.7
+median(readsmatrix$V2)
+##result: [1] 577996.5
+plot(readsmatrix$V2)
+
+###this results in a plot of just the raw reads. Would be useful to get residuals or something.
+#####may be more informative to graph differently for downstream analyses, to check individuals	
+#####that look odd in analyses such as PCA, Structure, etc.
+
+
+
 
 
 
