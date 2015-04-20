@@ -221,6 +221,11 @@ plot(readsmatrix$V2)
 #####may be more informative to graph differently for downstream analyses, to check individuals	
 #####that look odd in analyses such as PCA, Structure, etc.
 
+#NOTE: LOOK AT FILE: "readcounts_scatterplot.R" TO GET MORE INFO ON GRAPHS. ADDED ABLINES FOR 
+###MEDIAN, MEAN, STDEV FOR EACH TAXON
+
+
+
 
 
 
