@@ -225,13 +225,67 @@ plot(readsmatrix$V2)
 ###MEDIAN, MEAN, STDEV FOR EACH TAXON
 
 
+***********************************************
+***********************************************
+####RUN FASTQC TO PERFORM BASIC DATA QUALITY CHECKS####
+***********************************************
+***********************************************
 
 
 
 
+#######MORE QUALITY FILTERS IN R######
+###From nick's scripts
+
+##>> look at the distribution of SNP position to look at potential biases
+
+##>> look at number of SNPs per "tag" (locus)
+
+##>> look at number of alleles per SNP > relevant also to Kelly's issue
+
+##>> look at minor allele frequencies... filter?
+
+##>>look at potential contaminants in BLAST
+
+####create vector for coordinates of SNPs to be removed based on above distributions. This needs
+#######to be done on a per-dataset basis. After figuring out above potential biases, then I will
+#######decide which SNPs to keep and thus modify the code below that I got from Nick.
+
+blk.coords = vector()
+# this will find tags for removal
+temp=substr(Bbi.all@loc.names,
+            data.frame(matrix(unlist(gregexpr("_",Bbi.all@loc.names)), byrow=T))[,1],
+            nchar(Bbi.all@loc.names))
+blk.coords=which(temp%in%blk.list)     
+
+# this will find snps for removal
+temp=substr(Bbi.all@loc.names,
+            1,
+            data.frame(matrix(unlist(gregexpr("_",Bbi.all@loc.names)), byrow=T))[,1])
+blk.coords=c(blk.coords,which(temp%in%blk.list))
+
+length(blk.coords)             #this will remove 33090 of 86210 loci
+head(Bbi.all@loc.names[blk.coords],25)  #check to be sure loci identified match black list
+tail(Bbi.all@loc.names[blk.coords],25)
+Bbi.a=Bbi.all[,loc=names(Bbi.all@loc.names[-blk.coords])]   #this is the subset of the data without the blacklisted loci
+
+###Test for LD among loci??
+###Test for HWE??
 
 
 
+######RE-RUN STACKS?? ==> can re-run stacks with population info and flag -rxhapstats so that it'll take
+##########################population haplotype data and stats into account when filtering out SNPs (from Kelly)
+
+
+
+******************************************************
+******************************************************
+
+#3. FINAL SNP MATRIX CLEAN-UP AND EXPORT IN VCF TOOLS
+
+******************************************************
+******************************************************
 
 
 
