@@ -164,6 +164,7 @@ Er_420_CAACC-CGATGT.fq
 Er_424_AGCTA-CGATGT.fq
 Er_423_AAGGA-CGATGT.fq
 TNHC05833_CTGCG-CGATGT.fq
+
 ##NOTE: There is a single Tepuihyla sample in this library that will of course be transferred from 
 #####this point on to the "Tepuihyla" workflow.
 
@@ -179,9 +180,9 @@ TNHC05833_CTGCG-CGATGT.fq
 
 
 *****************************************************************
-*																*
-*				2. READ COUNTS AND QUALITY CHECKS				*
-*																*
+*                                                               *
+*            2.READ COUNTS AND QUALITY CHECKS                   *
+*                                                               *
 *****************************************************************
 
 ###1. GET TOTAL NUMBER OF READS PER INDIVIDUAL AFTER INITIAL FILTER IN process_radtags
@@ -225,16 +226,44 @@ plot(readsmatrix$V2)
 ###MEDIAN, MEAN, STDEV FOR EACH TAXON
 
 
-***********************************************
-***********************************************
+*******************************************************
+*******************************************************
 ####RUN FASTQC TO PERFORM BASIC DATA QUALITY CHECKS####
-***********************************************
-***********************************************
+*******************************************************
+*******************************************************
+
+##never done this! need to learn how to...
 
 
 
+*****************************************************************
+*                                                               *
+*                   3.RUN STACKS DENOVO_MAP                     *
+*                                                               *
+*****************************************************************
 
-#######MORE QUALITY FILTERS IN R######
+##first make output folder as named in script
+##then run denovo_map.pl as such:
+
+denovo_map.pl -T 8 -m 2 -M 3 -n 2 -S -b 2 -o ./priors_test_single/ -s ./Ch_319_AACCA-ATCACG.fq \
+
+
+####should look into the three flags (-m, -n, -o) and play around a bit with the inputs for them,
+#######see if they greatly affect outcomes or not. Also, should run with popmap to be able to do the 
+####### -rxhapstats that Kelly recommended (if possible).
+
+###LOOK AT FILE denovo_Stef_03_02_15.sh for details on the rest of the sequences.
+#####had to drop the five sequences that did not have any data associated to them after process_rads
+
+
+
+*****************************************************************
+*                                                               *
+*                   4.MORE QUALITY FILTERS IN R                 *
+*                                                               *
+*****************************************************************
+
+
 ###From nick's scripts
 
 ##>> look at the distribution of SNP position to look at potential biases
@@ -279,14 +308,12 @@ Bbi.a=Bbi.all[,loc=names(Bbi.all@loc.names[-blk.coords])]   #this is the subset 
 
 
 
-******************************************************
-******************************************************
 
-#3. FINAL SNP MATRIX CLEAN-UP AND EXPORT IN VCF TOOLS
-
-******************************************************
-******************************************************
-
+*****************************************************************
+*                                                               *
+*     5.FINAL SNP MATRIX CLEAN-UP AND EXPORT IN VCF TOOLS       *
+*                                                               *
+*****************************************************************
 
 
 
