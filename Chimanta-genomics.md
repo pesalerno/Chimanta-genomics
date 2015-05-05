@@ -17,21 +17,20 @@
 
 In general code is:
 
-	> process_radtags -p ./rawdata/ -b adapters_file.txt \  
-	    -o ./process_rads/  -c -q -r -D --inline_index \
-		--renz_1 sphI --renz_2 mspI -i gzfastq 
+	> process_radtags -p ./rawdata/ -b adapters_file.txt -o ./process_rads/  -c -q -r -D \
+	--inline_index --renz_1 sphI --renz_2 mspI -i gzfastq 
 
 Libraries for each are: 
 
 1. Tepuihyla: 
-	- single individual (filename=) **need to get from Benni!**
-	- Tep_1 (filename=)
-	- Tep_2 (filename=)
+	- pilot library, single individual (filename=) **need to get from Benni!**
+	- Tep_1 (filenames=PES_Tep_1_ATCACG_L007_R1_001.fastq.gz; PES_Tep_1_ATCACG_L007_R2_001.fastq.gz)
+	- Tep_2 (filename=PES_Tep_2_CGATGT_L007_R1_001.fastq.gz; PES_Tep_2_CGATGT_L007_R2_001.fastq.gz)
 2. Stefania:
-	- single individual (filename=) **need to get from Benni!**
-	- Stefania_16 (filename=)
-	- Stef_3 (filename=)
-	- Stef_4 (filename=)
+	- pilot library, single individual (filename=) **need to get from Benni!**
+	- Stefania_16 (filename=Stef_12_18_ATCACG_L004_R1_001.fastq.gz; Stef_12_18_ATCACG_L004_R2_001.fastq.gz)
+	- Stef_3 (filename=Stef_3_ATCACG_L008_R1_001.fastq.gz; Stef_3_ATCACG_L008_R2_001.fastq.gz)
+	- Stef_4 (filename=Stef_4b_CGATGT_L008_R1_001.fastq; Stef_4b_CGATGT_L008_R2_001.fastq)
 
 
 
@@ -40,7 +39,16 @@ Libraries for each are:
 #### 1.2. rename barcodes before merging libraries
 
 
+Rename within each output directory, then only copy (instead of move! copy then delete) only the renamed files. I used Becca's rename_barcodes_fixed.py script and ran as such:
 
+	> module load python
+	> python rename_barcodes_fixed.py './' '*.fq' 'barcodes.txt'
+
+The barcodes files is a simple tab delimited text file with the first column being old names (barcodes) and second column being new names (species ID, locality, etc).
+
+
+
+### Step 2: 454 and RADseq data mapping on bwa
 
 
 
