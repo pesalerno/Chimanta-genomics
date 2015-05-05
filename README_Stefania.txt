@@ -1,8 +1,8 @@
-*****************************************************************************************
-*																						*
-*								1. PROCESS RADTAGS										*
-*																						*
-*****************************************************************************************
+*****************************************************************
+*                                                               *
+*                   1. PROCESS RADTAGS                          *
+*                                                               *
+*****************************************************************
 
 #1. make directory for data output that matches script before running
 #2. run process_radtags
@@ -130,6 +130,7 @@ Ch_352_ACGGT-ATCACG.fq
 Er_412_CTGCG-ATCACG.fq
 Ch_325_GGTTG-ATCACG.fq
 Ab_377_ATTAC-ATCACG.fq
+
 ##dropped sequences/individuals in second library:
 Ch_327_AGCTA-ATCACG.fq
 Ab_407_CTGAT-ATCACG.fq
@@ -165,12 +166,12 @@ Er_424_AGCTA-CGATGT.fq
 Er_423_AAGGA-CGATGT.fq
 TNHC05833_CTGCG-CGATGT.fq
 
-##NOTE: There is a single Tepuihyla sample in this library that will of course be transferred from 
-#####this point on to the "Tepuihyla" workflow.
+##NOTE: There is a single Tepuihyla sample (TNHC05833)in this library that will of course be 
+#####transferred from this point on to the "Tepuihyla" workflow.
 
 #####RENAMING FILES#####
 ##Must rename files before continuing to denovo_map, since names are identical according to
-#####barcode overlap. Can use simple find/replace type commands in unix, just to separate
+#####barcode overlap. Can use simple find/replace or move type commands in unix, just to separate
 #####by library, but won't be informative down the road when analyzing data
 
 ##for renaming files, I'm using Becca's "rename_barcodes_fixed.py" python script:
