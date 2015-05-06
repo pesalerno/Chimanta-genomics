@@ -86,9 +86,9 @@ Need to do this from terminal with command wget and adress. Need to figure it ou
 
 
 #### 2.3. Map 454 reads to reference genome
-Align 454 data to reference genome as such:
+For longer reads, use bwasw command. Align 454 data to reference genome as such:
 
-	> bwa aln -t 4 referencegenome sequencesfile.gz >  outputname.bwa
+	> bwa bwasw -t 4 referencegenome 454seqs.txt > 454seqs.sam
 
 --> we are using four threads (CPUs) for faster processing
 
