@@ -75,24 +75,33 @@ Then, run the R script 'readcounts_scatterplot.R' to get a plot with ablines (av
 ### Step 2: 454 and RADseq data mapping on bwa (and/or velvet?)
 
 
-#### 2.1. Download reference genome (Xenopus or Rana?) as input for bwa
+#### 2.1. Download reference genome (*Xenopus* and *Nanorana*) as input for bwa
 
-Need to do this from terminal with command wget and adress. Need to figure it out!
+Doing this from terminal within Stampede (TACC) and with command wget. First for *Xenopus*:
 
+	> wget ftp://ftp.jgi-psf.org/pub/JGI_data/Frog/reads_single/xenopus0.fasta.Z
+
+For *Nanorana*, there are four separate fasta "contig" files for the genome, available in this [address](http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=JYOU01#contigs), and then I used wget for each copied link adress for each of the fasta files (same as above). 
 
 #### 2.2. Create index for reference genome in bwa
+For *Xenopus* (haven't made it work because of the .Z extension.... figure out or drop..?)
 
-	> bwa index ((-p hg19bwaidx -a bwtsw)--> need to figure out flags) filename.fa
+	> bwa index xenopus0.fasta.Z
 
+For *Nanorana* I ran all four contig fasta files at once, using the stampede job scheduler within the bwa-analyses folder, as such:
 
-#### 2.3. Map 454 reads to reference genome
+	> bwa index index.html?download=JYOU01.1.fsa_nt index.html?download=JYOU01.2.fsa_nt.gzindex.html?download=JYOU01.3.fsa_nt.gzindex.html?download=JYOU01.4.fsa_nt.gz
+ 
+#### 2.3. Align 454 reads to reference genome
 For longer reads, use bwasw command. Align 454 data to reference genome as such:
 
-	> bwa bwasw -t 4 referencegenome 454seqs.txt > 454seqs.sam
+	> bwa bwasw -t 6  index.html?download=JYOU01.1.fsa_nt index.html?download=JYOU01.2.fsa_nt.gz index.html?download=JYOU01.3.fsa_nt.gz index.html?download=JYOU01.4.fsa_nt.gz 454Reads.JA11211_PS334_RL13.sff > aln.sam
 
---> we are using four threads (CPUs) for faster processing
+--> we are using six threads (CPUs) for faster processing
 
-#### 2.4. Map ddRAD data (all libraries!) to reference genome and 454 data (maybe create new reference genome after step 2.3?)
+===> visualize data before moving on to next step
+
+#### 2.4. Align ddRAD data (all libraries!) to reference genome and 454 data (maybe create new reference genome after step 2.3?)
 
 For paired-end reads, you need to align each one separately to the reference genome: (following code copy/pasted from a tutorial, need to personalize after running this)
 
