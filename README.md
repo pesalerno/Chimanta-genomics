@@ -99,11 +99,26 @@ For longer reads, use bwasw command. Align 454 data to reference genome as such:
 
 --> we are using six threads (CPUs) for faster processing
 
-===> visualize data before moving on to next step
+===> visualize data before moving on to next step with the program Integrative Genomics Viewer [(IGV)](https://www.broadinstitute.org/software/igv/download). To do this, we need to convert output file from .sam to .bam format, which is the input format in IGV. We do this using the program [samtools](http://samtools.sourceforge.net/).
 
-#### 2.4. Align ddRAD data (all libraries!) to reference genome and 454 data (maybe create new reference genome after step 2.3?)
+First, convert from SAM to BAM format:
 
-For paired-end reads, you need to align each one separately to the reference genome: (following code copy/pasted from a tutorial, need to personalize after running this)
+	> module load samtools
+	> samtools view -b -S -o 454-align.bam 454-align.sam
+	
+Second, sort and index the BAM file:
+
+	> samtools sort 454-align.bam 454-align.sorted
+	> samtools index 454-align.sorted.bam
+
+I will need to export this as fasta for using as new reference genome for step 2.4
+
+
+#### 2.4. Align ddRAD data (for *Tepuihyla* and *Stefania* separately) to new reference genome from 454 + *Nanorana* data
+
+--> I'm doing this for each library separately so that I can generate a different reference genome for *Tepuihyla* (454 data + all *Tepuihyla* ddRAD libraries) and *Stefania* (454 data + all *Stefania* ddRAD libraries).
+
+For paired-end reads, you need to align each one separately to the reference genome: (following code was copy/pasted from a tutorial, so I need to personalize it after running this)
 
 	> bwa aln -t 4 hg19bwaidx s_3_1_sequence.txt.gz >  s_3_1_sequence.txt.bwa
 	> bwa aln -t 4 hg19bwaidx s_3_2_sequence.txt.gz >  s_3_2_sequence.txt.bwa
