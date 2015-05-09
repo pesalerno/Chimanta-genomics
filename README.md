@@ -4,7 +4,7 @@
 
 ## general workflow
 
-**NOTE**: this workflow includes three general datasets for the two species, *Tepuihyla edelcae* and *Stefania ginesi*. The first two datasets are several libraries of ddRAD (Illumina 150bp PE) for both species, and the third dataset is Roche 454 data obtained for a single individual of *Tepuihyla edelcae*. Workflow goes from raw data to final analyses.
+**NOTE**: this workflow includes three general datasets for the two species, *Tepuihyla edelcae* and *Stefania ginesi*. The first two datasets are several libraries of ddRAD (Illumina 150bp PE) for both species, and the third dataset is Roche 454 data obtained for a single individual of *Tepuihyla edelcae*. Workflow goes from raw data to final analyses. Corresponding author <patriciasalerno@gmail.com>. All materials in this repository are the Intellectual Property of **Patricia E. Salerno** and official collaborators of this project.
 
 ### Step 1: De-multiplexing
 
@@ -19,6 +19,8 @@ In general code is:
 
 	> process_radtags -p ./rawdata/ -b adapters_file.txt -o ./process_rads/  -c -q -r -D \
 	--inline_index --renz_1 sphI --renz_2 mspI -i gzfastq 
+
+**NOTE**: *(on 05/09/2015)* Need to re-do process rads!! I only did this for the forward reads initially since I had some issues previously and less reads were being kept (as far as I can remember). Now that I'm mapping, I relaly need to keep both!! at the very least for the reference genome and visualization steps.... then I can decide if they should be dropped from genotyping and variant calling steps....
 
 Libraries for each are: 
 
@@ -39,7 +41,7 @@ Libraries for each are:
 #### 1.2. rename barcodes before merging libraries
 
 
-Rename within each output directory, then only copy (instead of move! copy then delete) only the renamed files. I used Becca's rename_barcodes_fixed.py script and ran in shell as such:
+Rename within each output directory, then only copy (instead of move! copy then delete) only the renamed files. I used Becca's [rename_barcodes_fixed.py](https://github.com/pesalerno/Chimanta-genomics/blob/master/rename_barcodes_fixed.py) script and ran in shell as such:
 
 	> module load python
 	> python rename_barcodes_fixed.py './' '*.fq' 'barcodes.txt'
@@ -62,7 +64,7 @@ First, get total number of reads per individual after initial filter in process_
 
 The above code will print to screen sample ID (tab) number of reads. Save to a file.
 
-Then, run the R script 'readcounts_scatterplot.R' to get a plot with ablines (average and st deviation) for each species and all individual read counts.
+Then, run the R script [readcounts_scatterplot.R](https://github.com/pesalerno/Chimanta-genomics/blob/master/readcounts_scatterplot.R) to get a plot with ablines (average and st deviation) for each species and all individual read counts.
 
 1. Plot for *Tepuihyla* read counts (excluding 454 data):
 
@@ -72,7 +74,7 @@ Then, run the R script 'readcounts_scatterplot.R' to get a plot with ablines (av
 
 
 
-### Step 2: 454 and RADseq data mapping on bwa (and/or velvet?)
+### Step 2: 454 and RADseq data alignment on bwa
 
 
 #### 2.1. Download reference genome (*Xenopus* and *Nanorana*) as input for bwa
@@ -99,7 +101,9 @@ For longer reads, use bwasw command. Align 454 data to reference genome as such:
 
 --> we are using six threads (CPUs) for faster processing
 
-===> visualize data before moving on to next step with the program Integrative Genomics Viewer [(IGV)](https://www.broadinstitute.org/software/igv/download). To do this, we need to convert output file from .sam to .bam format, which is the input format in IGV. We do this using the program [samtools](http://samtools.sourceforge.net/).
+#### Visualize alignment in IGV.
+
+We need to visualize and export a fasta file of alignment before moving on to next step with the program Integrative Genomics Viewer [(IGV)](https://www.broadinstitute.org/software/igv/download). To do this, we need to convert output file from .sam to .bam format, which is the input format in IGV. We do this using the program [samtools](http://samtools.sourceforge.net/).
 
 First, convert from SAM to BAM format:
 
@@ -111,46 +115,122 @@ Second, sort and index the BAM file:
 	> samtools sort 454-align.bam 454-align.sorted
 	> samtools index 454-align.sorted.bam
 
+Download relevant data files to personal computer so that we can visualize on IGV:
+
+	> 454-align.sorted.bam
+	> 454-align.sorted.bam.bai
+	> all .fasta files for alignment
+
+Then, in IGV, I need to create a .genome file using all the reference genome fasta files (in this case since there's four, I'm defining a directory as the input)
+
+
 I will need to export this as fasta for using as new reference genome for step 2.4
 
 
 #### 2.4. Align ddRAD data (for *Tepuihyla* and *Stefania* separately) to new reference genome from 454 + *Nanorana* data
 
---> I'm doing this for each library separately so that I can generate a different reference genome for *Tepuihyla* (454 data + all *Tepuihyla* ddRAD libraries) and *Stefania* (454 data + all *Stefania* ddRAD libraries).
+--> I'm doing this for each species separately so that I can generate a different reference genome for *Tepuihyla* (454 data + all *Tepuihyla* ddRAD libraries) and *Stefania* (454 data + all *Stefania* ddRAD libraries).
 
-For paired-end reads, you need to align each one separately to the reference genome: (following code was copy/pasted from a tutorial, so I need to personalize it after running this)
+For paired-end reads, you need to align each one separately to the reference genome: (following code was copy/pasted from a tutorial, so I need to personalize it after running this). In my case, since I have many individual libraries, I will align them to the reference genome **AFTER** they've been de-multiplexed, but before they've been through denovo_map (less data should be lost).
 
-	> bwa aln -t 4 hg19bwaidx s_3_1_sequence.txt.gz >  s_3_1_sequence.txt.bwa
-	> bwa aln -t 4 hg19bwaidx s_3_2_sequence.txt.gz >  s_3_2_sequence.txt.bwa
-	> bwa sampe hg19bwaidx s_3_1_sequence.txt.bwa s_3_2_sequence.txt.bwa \
-			s_3_1_sequence.txt.gz s_3_2_sequence.txt.gz > s_3_sequence.txt.sam
+So, step by step for this section would be:
 
+- Index new reference genome (454+*Nanorana*)
+
+		> bwa index new-genome-file.fasta
+
+- Align all demultiplexed/cleaned read files to the new reference genome. Need to do forward and reverse reads separately.
+
+		> bwa mem -t 6 
+
+
+- Visualize in IGV (follow same steps as above with .sam to .bam conversion)
+
+
+		> module load samtools
+		> samtools view -b -S -o 454-align.bam 454-align.sam
+		> samtools sort 454-align.bam 454-align.sorted
+		> samtools index 454-align.sorted.bam
+
+
+#####2.4.4. Export as .fasta for importing as new reference genome in Stacks 
+
+(I think I don't need to!! can use other formats, check Stacks manual--> can be in **.sam** or **.bam** formats)
+
+
+
+
+###Step 3: Reference mapping on Stacks 
+
+This is of course done with each species separately, and at this point of the work flow each species has its own reference genome. 
+
+Reference genomes are: 
+- *Tepuihyla*: (outut file from step 2.4.4)
+- *Stefania*: (output file from step 2.4.4)
+
+Steps for reference mapping are the following (all steps within **Step 3** are identical for each species, unless otherwise noted): 
+
+#####3.1. Generate popmap file
+
+This file needs all individual IDs (file names excluding extension) in the first column, and populaiton assignment in second column of a tab delimited text file.
+
+Export a list of all files into a text document, within the directory with all de-multiplexed sequences, as such:
+
+	> ls > fileslist.txt
+
+Eliminate file extension with find/replace, and add (tab) population assignment in numbers (1 through n) in second column.
+
+#####3.2. Generate list of sequences to input into mapping script for Stacks
+
+We need a list of every single sequence file that will be used as input for Stacks, organized in a single line (single line is due to Stampede cluster issues if kept in separate lines) in the following format:
+
+	> -s ./Ab_365_CGAAT-CGATGT.1.fq -s ./all-other-files
+
+
+Use files list generated above, without eliminating file extension, and with find/replace arguments in TextWrangler to change to above format. 
+
+#####3.3. Run program ref.map.pl in Stacks
+
+Instead of doing **denovo_map.pl**, I'm using the reference genome and running [ref.map.pl](http://creskolab.uoregon.edu/stacks/comp/ref_map.php) for validation and likely for keeping a larger number of contigs/snps.  
+
+In general, script is as follows:
+
+	> ref_map.pl -o /path/for/output -n 2 -m 2 -T 12 -O popmap.txt -b 1 -S -s ./all-sequences-here\
+ 
+===> Explanation of flags and options is the following:   
+**n=2** *Allow two mismatches between loci when building catalog (default=0)*  
+**m=2** *Minimum depth of coverage to report a stack in pstacks (default=1)*  
+**S** *(Disable recording SQL in database (because I'm running from server))*
+
+
+#####3.4. Make genotype and haplotype corrections in Stacks
+
+This step essentially re-runs all of the mapping pipeline (sstacks, ustacks, etc) in the program [rxstacks](http://creskolab.uoregon.edu/stacks/comp/rxstacks.php) in order to correct haplotype and SNP calls by population haplotype information. 
+
+	> rxstacks -b 1 -P ./input-stacksoutput/ -o /new-output-path/ --prune_haplo --lnl_filter --lnl_dist 
+
+ 
+===> Explanation of flags and options is the following:   
+**--prune_haplo** *"prune out non-biological haplotypes unlikely to occur in population"*  
+**--lnl_filter** *"filter calato loci based on the mean log likelihood of the catalog locus in the population"*  
+**--lnl_dist** *"print distribution of mean log likelihood required to keep a catalog locus"*  
+
+
+From the stacks manual, "we can bucket the log likelihood values to plot it more conveniently using the shell:"
+
+	> cat batch_1.rxstacks_lnls.tsv | grep -v "^#" | awk '{bucket=(int($2)); lnls[bucket] += 1} END { for (bucket in lnls) print bucket, "\t", lnls[bucket]}' | sort -n > lnls.tsv
+
+Then we can generate a simple plot in R:
 
 
 
   
+  
+    
+    
+    
 
 
-
-**strong** or __strong__ ( Cmd + B )
-
-*emphasize* or _emphasize_ ( Shift + Cmd + I )
-
-**Sometimes I want a lot of text to be bold.
-Like, seriously, a _LOT_ of text**
-
-
-#### Links and Email
-
-An email <example@example.com> link.
-
-Simple inline link <http://chenluois.com>, another inline link [Smaller](http://smallerapp.com), one more inline link with title [Resize](http://resizesafari.com "a Safari extension").
-
-A [reference style][id] link. Input id, then anywhere in the doc, define the link with corresponding id:
-
-[id]: http://mouapp.com "Markdown editor on Mac OS X"
-
-Titles ( or called tool tips ) in the links are optional.
 
 #### Images
 
@@ -160,34 +240,6 @@ A ![Resize icon][2] reference style image.
 
 [2]: http://resizesafari.com/favicon.ico "Title"
 
-#### Inline code and Block code
-
-Inline code are surround by `acute` key. To create a block code:
-
-	Indent each line by at least 1 tab, or 4 spaces.
-    var Mou = exactlyTheAppIwant; 
-
-####  Ordered Lists
-
-Ordered lists are created using "1." + Space:
-
-1. Odered list item
-2. Odered list item
-3. Odered list item
-
-#### Unordered Lists
-
-Unordered list are created using "*" + Space:
-
-* Unordered list item
-* Unordered list item
-* Unordered list item 
-
-Or using "-" + Space:
-
-- Unordered list item
-- Unordered list item
-- Unordered list item
 
 #### Hard Linebreak
 
@@ -204,27 +256,7 @@ Three or more asterisks or dashes:
 
 - - - -
 
-#### Headers
 
-Setext-style:
-
-This is H1
-==========
-
-This is H2
-----------
-
-atx-style:
-
-# This is H1
-## This is H2
-### This is H3
-#### This is H4
-##### This is H5
-###### This is H6
-
-
-### Shortcuts
 
 #### View
 
