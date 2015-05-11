@@ -121,7 +121,7 @@ Download relevant data files to personal computer so that we can visualize on IG
 	> 454-align.sorted.bam.bai
 	> all .fasta files for alignment
 
-Then, in IGV, I need to create a .genome file using all the reference genome fasta files (in this case since there's four, I'm defining a directory as the input)
+Then, in IGV, I need to create a .genome file using all the reference genome fasta files (in this case since there's four, I'm defining a directory as the input). Information on how to create the .genome file can be found [here](https://www.broadinstitute.org/software/igv/LoadGenome)
 
 
 I will need to export this as fasta for using as new reference genome for step 2.4
@@ -164,8 +164,8 @@ So, step by step for this section would be:
 
 This is of course done with each species separately, and at this point of the work flow each species has its own reference genome. 
 
-Reference genomes are: 
-- *Tepuihyla*: (outut file from step 2.4.4)
+Reference genomes are:   
+- *Tepuihyla*: (outut file from step 2.4.4)  
 - *Stefania*: (output file from step 2.4.4)
 
 Steps for reference mapping are the following (all steps within **Step 3** are identical for each species, unless otherwise noted): 
@@ -212,11 +212,11 @@ This step essentially re-runs all of the mapping pipeline (sstacks, ustacks, etc
  
 ===> Explanation of flags and options is the following:   
 **--prune_haplo** *"prune out non-biological haplotypes unlikely to occur in population"*  
-**--lnl_filter** *"filter calato loci based on the mean log likelihood of the catalog locus in the population"*  
+**--lnl_filter** *"filter calatog loci based on the mean log likelihood of the catalog locus in the population"*  
 **--lnl_dist** *"print distribution of mean log likelihood required to keep a catalog locus"*  
 
 
-From the stacks manual, "we can bucket the log likelihood values to plot it more conveniently using the shell:"
+From the stacks manual, *"we can bucket the log likelihood values to plot it more conveniently using the shell"*:
 
 	> cat batch_1.rxstacks_lnls.tsv | grep -v "^#" | awk '{bucket=(int($2)); lnls[bucket] += 1} END { for (bucket in lnls) print bucket, "\t", lnls[bucket]}' | sort -n > lnls.tsv
 
