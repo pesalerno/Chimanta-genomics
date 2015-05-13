@@ -85,23 +85,30 @@ Doing this from terminal within Stampede (TACC) and with command wget. First for
 
 For *Nanorana*, there are four separate fasta "contig" files for the genome, available in this [address](http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=JYOU01#contigs), and then I used wget for each copied link adress for each of the fasta files (same as above). 
 
+**NOTE**: IGV visualization (on step 2.4) failed, I think it's because I didn't download the right files. I'm redoing this from [this link](http://gigadb.org/dataset/100132) and doing wget with a single fasta gzipped file, as such:
+
+
+	> wget ftp://climb.genomics.cn/pub/10.5524/100001_101000/100132/Nanorana_parkeri\
+			.genome.v2.fa.gz
+	
+
 #### 2.2. Create index for reference genome in bwa
-For *Xenopus* (haven't made it work because of the .Z extension.... figure out or drop..?)
+I ran the single fasta gzipped file from *Nanorana*, using the stampede job scheduler within the bwa-analyses folder, as such:
 
-	> bwa index xenopus0.fasta.Z
-
-For *Nanorana* I ran all four contig fasta files at once, using the stampede job scheduler within the bwa-analyses folder, as such:
-
-	> bwa index index.html?download=JYOU01.1.fsa_nt index.html?download=JYOU01.2.fsa_nt.gzindex.html?download=JYOU01.3.fsa_nt.gzindex.html?download=JYOU01.4.fsa_nt.gz
+	> bwa index Nanorana_parkeri.genome.v2.fa.gz
  
 #### 2.3. Align 454 reads to reference genome
 For longer reads, use bwasw command. Align 454 data to reference genome as such:
 
 	> bwa bwasw -t 6  index.html?download=JYOU01.1.fsa_nt index.html?download=JYOU01.2.fsa_nt.gz index.html?download=JYOU01.3.fsa_nt.gz index.html?download=JYOU01.4.fsa_nt.gz 454Reads.JA11211_PS334_RL13.sff > aln.sam
 
---> we are using six threads (CPUs) for faster processing
+--> we are using six threads (CPUs) for faster processing  
 
-#### Visualize alignment in IGV.
+NEW code:
+
+	> bwa bwasw -t 6 Nanorana_parkeri.genome.v2.fa.gz 454Reads.JA11211_PS334_RL13.sff > aln.sam
+
+#### 2.4. Visualize alignment in IGV.
 
 We need to visualize and export a fasta file of alignment before moving on to next step with the program Integrative Genomics Viewer [(IGV)](https://www.broadinstitute.org/software/igv/download). To do this, we need to convert output file from .sam to .bam format, which is the input format in IGV. We do this using the program [samtools](http://samtools.sourceforge.net/).
 
