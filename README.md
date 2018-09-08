@@ -137,3 +137,9 @@ We used the ***.map*** output from the last ***plink*** filter in Text Wrangler,
 Based the **.irem** file from the second iteration of *plink* we removed from the popmap (to use in populations input) the only  individual that did not pass **plink** filter (i.e. individuals with >50% missing data). Now we can run populations again using the whitelist of loci and the updated popmap file for loci and individuals to retain based on the plink filters. 
 
 	populations -b 1 -P ./ -M ./popmap.txt  -p 1 -r 0.5 -W Pr-whitelist --write_random_snp --structure --plink --vcf --genepop --fstats --phylip
+
+
+##Step XX: Obtaining maximum likelihood phylogenies with bootstraps for *Stefania* and *Tepuihyla* SNPs:
+
+	./raxml-ng --all --msa Stef-NEW-c.phylip.txt --model GTR+G --tree pars {10} --bs-trees 200
+
