@@ -25,11 +25,11 @@ In general code is:
 Libraries for each are: 
 
 1. *Tepuihyla*: 
-	- pilot library, single individual (filename=) **need to get from Benni!**
+	- pilot library, single individual (filename=) 
 	- Tep_1 (files=PES_Tep_1_ATCACG_L007_R1_001.fastq.gz; PES_Tep_1_ATCACG_L007_R2_001.fastq.gz)
 	- Tep_2 (files=PES_Tep_2_CGATGT_L007_R1_001.fastq.gz; PES_Tep_2_CGATGT_L007_R2_001.fastq.gz)
 2. *Stefania*:
-	- pilot library, single individual (filename=) **need to get from Benni!**
+	- pilot library, single individual (filename=) 
 	- Stefania_16 (files=Stef_12_18_ATCACG_L004_R1_001.fastq.gz; Stef_12_18_ATCACG_L004_R2_001.fastq.gz)
 	- Stef_3 (files=Stef_3_ATCACG_L008_R1_001.fastq.gz; Stef_3_ATCACG_L008_R2_001.fastq.gz)
 	- Stef_4 (files=Stef_4b_CGATGT_L008_R1_001.fastq; Stef_4b_CGATGT_L008_R2_001.fastq)
@@ -50,7 +50,7 @@ The barcodes files is a simple tab delimited text file with the first column bei
 
 #### 1.3. get read counts from each individual sample for both species
 
-First, get total number of reads per individual after initial filter in process_radtags. Run the following script in the shell, inside folder with processed reads from all libraries (each species separately):
+Get total number of reads per individual after initial filter in process_radtags. Run the following script in the shell, inside folder with processed reads from all libraries (each species separately):
 
 	echo -e 'SAMPLE_ID_FULL\tNUM_READS'
 	
@@ -61,16 +61,6 @@ First, get total number of reads per individual after initial filter in process_
 		cat $file | grep '^@.*' | wc -l
 	done
 
-
-The above code will print to screen sample ID (tab) number of reads. Save to a file.
-
-Then, run the R script [readcounts_scatterplot.R](https://github.com/pesalerno/Chimanta-genomics/blob/master/readcounts_scatterplot.R) to get a plot with ablines (average and st deviation) for each species and all individual read counts.
-
-1. Plot for *Tepuihyla* read counts (excluding 454 data):
-
-
-
-2. Plot for *Stefania* read counts:
 
 
 
