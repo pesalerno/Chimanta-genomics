@@ -20,7 +20,6 @@ In general code is:
 	> process_radtags -p ./rawdata/ -b adapters_file.txt -o ./process_rads/  -c -q -r -D \
 	--inline_index --renz_1 sphI --renz_2 mspI -i gzfastq 
 
-**NOTE**: *(on 05/09/2015)* Need to re-do process rads!! I only did this for the forward reads initially since I had some issues previously and less reads were being kept (as far as I can remember). Now that I'm mapping, I relaly need to keep both!! at the very least for the reference genome and visualization steps.... then I can decide if they should be dropped from genotyping and variant calling steps....
 
 Libraries for each are: 
 
@@ -67,19 +66,23 @@ Get total number of reads per individual after initial filter in process_radtags
 Genotyping
 -------
 
-After finding the lowest genotyping error rate for our dataset and the appropriate *denovo_map.pl* parameters, we used the following code for our final genotyping:
+After a running a few iterations using different combinations of parameters -m, -n, and M, we used the following code for our final genotyping:
 
 
-        denovo_map.pl -T 16 -m 5 -M 2 -n 2 -S -b 2 -X "ustacks:--max_locus_stacks [3]" -o /path/to/denovomap_out/ \
-        -s /path/to/rad_tags/filename.fq \ 
+       GET DENOVO CODE FOR BOTH SPECIES
+
+Which resulted in mostly stable numbers of SNPs and 
 
 _________
 
-Filtering SNP matrix.
-------
+### Step 2: Filtering the SNP matrix.
+
 
 After genotyping, we first exported the SNP matrix with minimal filter in *populations*: 
 
+	
+	CHECK POPULATIONS CODE FOR BOTH SPECIES
+	
 	>>populations 
 	#!/bin/bash
 	#SBATCH cluster specific information 
@@ -88,49 +91,33 @@ After genotyping, we first exported the SNP matrix with minimal filter in *popul
 
 
 
-Using [PLINK](http://pngu.mgh.harvard.edu/~purcell/plink/summary.shtml), we filtered our dataset in several steps.
+We filtered the SNP matrix using [PLINK](http://pngu.mgh.harvard.edu/~purcell/plink/summary.shtml) in the following way:
 
-First, we filtered out loci with too much missing data:
+For *Tepuihyla*, we did: 
 
-	./plink --file input-name --geno 0.5 --recode --out output-filename_a --noweb
-
-Second, we filtered out individuals with too much missing data:
-
-	./plink --file input-filename_a --mind 0.5 --recode --out output-filename_b --noweb
+	./plink --file input-name --geno 0.4 --mind 0.6 --maf 0.02 
 	
-Third, we filtered out based on minor allele frequency cutoffs:
+For *Stefania*, we did: 
 
-	./plink --file input-filename_b --maf 0.01 --recode --out output-filename_c --noweb
+	./plink --file input-name --geno 0.5 --mind --0.5 --maf 0.02
+
+
+In both cases, filtering parameters were based on the combination that increased the amount of individuals and SNPs in all populations. 
+
+
+In *Tepuihyla*, the [resulting SNP matrix]() used in downstream analyses had a total missingness of xxxxx and retained xxxx SNPs and XXXX individuals. 
+
+In *Stefania*, the [resulting SNP matrix]() used in downstream analyses had a total missingness of xxxxx and retained xxxx SNPs and XXXX individuals.
+
  
-We did three maf cutoffs (0.01, 0.02, 0.05) to evaluate missingness of final matrices and whether basic population analyses vary with them. Based on [these](https://github.com/pesalerno/PUMAgenomics/blob/master/maf-filters.results.txt) results, we decided to be more stringent on initial loci filtered out (keep loci present in at least 75% of individuals) and less stringent on maf (filter out loci with maf<0.01). 
-
-**ADDITIONAL FILTER:** We found that after base #94 there were a high number of SNPs ([see here](https://github.com/pesalerno/PUMAgenomics/blob/master/reads-SNPposition.png)which were likely due to sequencing error. To filter them out, we first saw the number of times base #90-96 were found in a given SNP list using the following code: 
-
-	cat loci-rows.txt | awk '/_90/ {count++} END {print count}'
-	
-	cat loci-rows.txt | awk '/_96/ {count++} END {print count}' 
 
 
-We decided to only eliminate the last base sequenced (#95) from the SNP file based on the [numbers obtained](https://github.com/pesalerno/PUMAgenomics/blob/master/loci-SNPs.txt). In order to create a blacklist of loci to eliminate from the SNP matrix, we used the following **grep** commands with the **.map** output from ***populations*** as follows: 
-
-	\d\t(\d*_\d*)\t\d\t\d*$ ##find
-	\1 ##replace
-
-Saving the file as "loci_rows-to-filter.txt", we then saved the list of loci that should be blacklisted using this code: 
-
-	cat loci_rows-to-filter.txt | awk '/_95/ {print}' > blacklist_95.txt
-
-
-We then eliminated those loci using ***plink***, the .ped and .map outputs from populations and the blacklist of SNP position #95 using with the following code: 
-
-	plink --file Puma-filtered-maf_01 --exclude blacklist_95.txt --recode --out filtered_b --noweb
-	### file terminations don't need to be added if flag is --file
-
+###
+###
 
 Obtaining population stats using the program **populations** with a whitelist of loci and individuals that passed filters
 ------
 	
-For downstream analyses, we used the final filters of loci with 75% individuals sequenced, individuals with no less than 50% missing data, maf 0.01, and filtering out the last sequnced base (#95). This final matrix had 12456 SNPs and a genotyping rate of 0.88. The structure matrix can be found [here](https://github.com/pesalerno/PUMAgenomics/blob/master/Puma_filtered_08_17_17.stru). 
 
 
 In order to get the *populations* stats outputs from STACKS, we re-ran populations using a whitelist, which requires file that only has the locis ID and excludes the SNP position ID. Thus, only the first string before the underscore needs to be kept. The whitelist file format is ordered as a simple text file containing one catalog locus per line: 
