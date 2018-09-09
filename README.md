@@ -71,8 +71,6 @@ Get total number of reads per individual after initial filter in process_radtags
 
 ### Step 2: denovo genotyping
 
-#####Genotyping
--------
 
 After exploring our dataset by running a few combinations of parameters -m, -n, and M, we used the following code for our final genotyping:
 
@@ -112,8 +110,8 @@ In *Stefania*, the [resulting SNP matrix](https://github.com/pesalerno/Chimanta-
 ###
 ###
 
-#####Obtaining population stats using the program **populations** with a whitelist of loci and individuals that passed filters
-------
+###Obtaining population stats using the program **populations** with a whitelist of loci and individuals that passed filters
+
 	
 
 
