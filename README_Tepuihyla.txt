@@ -243,3 +243,171 @@ Er_R-11_CAACC-CGATGT.fq
 *****************************************************************************************
 
 
+*******************************************************
+*******************************************************
+####RUN FASTQC TO PERFORM BASIC DATA QUALITY CHECKS####
+*******************************************************
+*******************************************************
+
+
+
+*****************************************************************
+*                                                               *
+*                   3.RUN STACKS DENOVO_MAP                     *
+*                                                               *
+*****************************************************************
+
+
+
+denovo_map.pl -T 8 -m 2 -M 3 -n 2 -S -b 2 -o ./priors_test_single/ -s ./Ch_319_AACCA-ATCACG.fq \
+
+
+#####had to drop the five sequences that did not have any data associated to them after process_rads
+
+
+
+*****************************************************************
+*                                                               *
+*                   4.EXPORT AND FILTER IN PLINK                *
+*                                                               *
+*****************************************************************
+
+Exported in populations using minimal filters: 
+
+	populations -b 1 -P ./denovo-03-2017 -M ./popmap-Tep.txt  -t 36 -p 1 -r 0.5 -W Tep-whitelist --write_random_snp --structure --plink
+	
+
+The used plink to filter sequentially first for loci with too much missing data, then individuals with too much missing data, then by minor allele frequency < 0.02.
+
+@----------------------------------------------------------@
+|        PLINK!       |     v1.07      |   10/Aug/2009     |
+|----------------------------------------------------------|
+|  (C) 2009 Shaun Purcell, GNU General Public License, v2  |
+|----------------------------------------------------------|
+|  For documentation, citation & bug-report instructions:  |
+|        http://pngu.mgh.harvard.edu/purcell/plink/        |
+@----------------------------------------------------------@
+
+Skipping web check... [ --noweb ] 
+Writing this text to log file [ Tep-04-02.log ]
+Analysis started: Sun Apr  2 19:17:42 2017
+
+Options in effect:
+	--file batch_1.plink
+	--geno 0.4
+	--recode
+	--out Tep-04-02
+	--noweb
+
+23051 (of 23051) markers to be included from [ batch_1.plink.map ]
+Warning, found 97 individuals with ambiguous sex codes
+Writing list of these individuals to [ Tep-04-02.nosex ]
+97 individuals read from [ batch_1.plink.ped ] 
+0 individuals with nonmissing phenotypes
+Assuming a disease phenotype (1=unaff, 2=aff, 0=miss)
+Missing phenotype value is also -9
+0 cases, 0 controls and 97 missing
+0 males, 0 females, and 97 of unspecified sex
+Before frequency and genotyping pruning, there are 23051 SNPs
+97 founders and 0 non-founders found
+Total genotyping rate in remaining individuals is 0.569417
+15570 SNPs failed missingness test ( GENO > 0.4 )
+0 SNPs failed frequency test ( MAF < 0 )
+After frequency and genotyping pruning, there are 7481 SNPs
+After filtering, 0 cases, 0 controls and 97 missing
+After filtering, 0 males, 0 females, and 97 of unspecified sex
+Writing recoded ped file to [ Tep-04-02.ped ] 
+Writing new map file to [ Tep-04-02.map ] 
+
+Analysis finished: Sun Apr  2 19:17:45 2017
+
+@----------------------------------------------------------@
+|        PLINK!       |     v1.07      |   10/Aug/2009     |
+|----------------------------------------------------------|
+|  (C) 2009 Shaun Purcell, GNU General Public License, v2  |
+|----------------------------------------------------------|
+|  For documentation, citation & bug-report instructions:  |
+|        http://pngu.mgh.harvard.edu/purcell/plink/        |
+@----------------------------------------------------------@
+
+Skipping web check... [ --noweb ] 
+Writing this text to log file [ Tep-04-02-b.log ]
+Analysis started: Sun Apr  2 19:18:43 2017
+
+Options in effect:
+	--file Tep-04-02
+	--mind 0.5
+	--recode
+	--out Tep-04-02-b
+	--noweb
+
+7481 (of 7481) markers to be included from [ Tep-04-02.map ]
+Warning, found 97 individuals with ambiguous sex codes
+Writing list of these individuals to [ Tep-04-02-b.nosex ]
+97 individuals read from [ Tep-04-02.ped ] 
+0 individuals with nonmissing phenotypes
+Assuming a disease phenotype (1=unaff, 2=aff, 0=miss)
+Missing phenotype value is also -9
+0 cases, 0 controls and 97 missing
+0 males, 0 females, and 97 of unspecified sex
+Before frequency and genotyping pruning, there are 7481 SNPs
+97 founders and 0 non-founders found
+Writing list of removed individuals to [ Tep-04-02-b.irem ]
+26 of 97 individuals removed for low genotyping ( MIND > 0.5 )
+Total genotyping rate in remaining individuals is 0.885012
+0 SNPs failed missingness test ( GENO > 1 )
+0 SNPs failed frequency test ( MAF < 0 )
+After frequency and genotyping pruning, there are 7481 SNPs
+After filtering, 0 cases, 0 controls and 71 missing
+After filtering, 0 males, 0 females, and 71 of unspecified sex
+Writing recoded ped file to [ Tep-04-02-b.ped ] 
+Writing new map file to [ Tep-04-02-b.map ] 
+
+Analysis finished: Sun Apr  2 19:18:44 2017
+
+@----------------------------------------------------------@
+|        PLINK!       |     v1.07      |   10/Aug/2009     |
+|----------------------------------------------------------|
+|  (C) 2009 Shaun Purcell, GNU General Public License, v2  |
+|----------------------------------------------------------|
+|  For documentation, citation & bug-report instructions:  |
+|        http://pngu.mgh.harvard.edu/purcell/plink/        |
+@----------------------------------------------------------@
+
+Skipping web check... [ --noweb ] 
+Writing this text to log file [ Tep_04_02_2_c.log ]
+Analysis started: Sat Sep  8 21:04:34 2018
+
+Options in effect:
+	--file Tep-04-02-b
+	--maf 0.02
+	--out Tep_04_02_2_c
+	--noweb
+
+7481 (of 7481) markers to be included from [ Tep-04-02-b.map ]
+Warning, found 71 individuals with ambiguous sex codes
+These individuals will be set to missing ( or use --allow-no-sex )
+Writing list of these individuals to [ Tep_04_02_2_c.nosex ]
+71 individuals read from [ Tep-04-02-b.ped ] 
+0 individuals with nonmissing phenotypes
+Assuming a disease phenotype (1=unaff, 2=aff, 0=miss)
+Missing phenotype value is also -9
+0 cases, 0 controls and 71 missing
+0 males, 0 females, and 71 of unspecified sex
+Before frequency and genotyping pruning, there are 7481 SNPs
+71 founders and 0 non-founders found
+Total genotyping rate in remaining individuals is 0.885012
+0 SNPs failed missingness test ( GENO > 1 )
+2705 SNPs failed frequency test ( MAF < 0.02 )
+After frequency and genotyping pruning, there are 4776 SNPs
+After filtering, 0 cases, 0 controls and 71 missing
+After filtering, 0 males, 0 females, and 71 of unspecified sex
+
+Analysis finished: Sat Sep  8 21:04:36 2018
+
+*****************************************************************
+*                                                               *
+*  					   5.DOWNSTREAM ANALYSES                    *
+*                                                               *
+*****************************************************************
+

@@ -234,7 +234,7 @@ denovo_map.pl -T 8 -m 2 -M 3 -n 2 -S -b 2 -o ./priors_test_single/ -s ./Ch_319_A
 
 Exported in populations using minimal filters: 
 
-	look up populations code!! 
+	populations -b 1 -P ./denovo-03-2017 -M ./popmap-Tep.txt  -t 36 -p 1 -r 0.5 -W Tep-whitelist --write_random_snp --structure --plink
 	
 
 The used plink to filter sequentially first for loci with too much missing data, then individuals with too much missing data, then by minor allele frequency < 0.02.

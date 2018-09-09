@@ -68,12 +68,11 @@ Get total number of reads per individual after initial filter in process_radtags
 Genotyping
 -------
 
-After a running a few iterations using different combinations of parameters -m, -n, and M, we used the following code for our final genotyping:
+After exploring our dataset by running a few combinations of parameters -m, -n, and M, we used the following code for our final genotyping:
 
 
-       GET DENOVO CODE FOR BOTH SPECIES
+       denovo_map.pl -T 8 -m 2 -M 3 -n 2 -S -b 2 -o ./output-folder/ -s ./sequence_1.fq \
 
-Which resulted in mostly stable numbers of SNPs and 
 
 _________
 
@@ -99,7 +98,7 @@ For *Stefania*, we did:
 In both cases, filtering parameters were based on the combination that increased the amount of individuals and SNPs in all populations. 
 
 
-In *Tepuihyla*, the [resulting SNP matrix](https://github.com/pesalerno/Chimanta-genomics/blob/master/Tep-04-02-c.stru) used in downstream analyses had a total missingness of xxxxx and retained xxxx SNPs and 71 individuals. 
+In *Tepuihyla*, the [resulting SNP matrix](https://github.com/pesalerno/Chimanta-genomics/blob/master/Tep-04-02-c.stru) used in downstream analyses had a total missingness of 0.885012 and retained 4776 SNPs and 71 individuals. 
 
 In *Stefania*, the [resulting SNP matrix](https://github.com/pesalerno/Chimanta-genomics/blob/master/Stef-NEW-c.stru) used in downstream analyses had a total missingness of 0.883727 and retained 8734 SNPs and 46 individuals.
 
