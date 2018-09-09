@@ -1,4 +1,4 @@
-# Chimanta landscape genomics
+# Chimantá Genomics
 
 ![Mou icon](http://www.climax-magazine.com/wp-content/uploads/2013/02/Glowacz_Jaeger_des_Augenblicks_2_Snapseed.jpg)
 
