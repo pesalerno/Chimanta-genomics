@@ -71,7 +71,7 @@ Get total number of reads per individual after initial filter in process_radtags
 
 ### Step 2: denovo genotyping
 
-Genotyping
+#####Genotyping
 -------
 
 After exploring our dataset by running a few combinations of parameters -m, -n, and M, we used the following code for our final genotyping:
@@ -112,7 +112,7 @@ In *Stefania*, the [resulting SNP matrix](https://github.com/pesalerno/Chimanta-
 ###
 ###
 
-Obtaining population stats using the program **populations** with a whitelist of loci and individuals that passed filters
+#####Obtaining population stats using the program **populations** with a whitelist of loci and individuals that passed filters
 ------
 	
 
@@ -135,7 +135,14 @@ Based the **.irem** file from the second iteration of *plink* we removed from th
 
 	populations -b 1 -P ./denovo-03-2017 -M ./popmap-Tep.txt  -t 36 -p 1 -r 0.5 -W Tep-whitelist --write_random_snp --phylip --structure --plink --vcf --genepop --fstats
 
-##Step XX: Obtaining maximum likelihood phylogenies with bootstraps for *Stefania* and *Tepuihyla* SNPs:
+##Step 3: Structure and population estimates in adegenet
+
+We ran Principal Components and Discriminant Analyses using **adegenet**, and obtained some population measures using the package **hierfstat** in R. 
+
+> The code used for adegenet and hierfstat analyses can be found [here](https://github.com/pesalerno/Chimanta-genomics/blob/master/adegenet-Tepuihyla-NEW.R) for *Tepuihyla* and [here](https://github.com/pesalerno/Chimanta-genomics/blob/master/adegenet-Stefania-NEW-b.R) for *Stefania*.
+
+
+##Step 4: Obtaining maximum likelihood phylogenies with bootstraps for *Stefania* and *Tepuihyla* SNPs:
 
 	./raxml-ng --all --msa Stef-NEW-c.phylip.txt --model GTR+G --tree pars {10} --bs-trees 200
 
