@@ -2,11 +2,14 @@
 
 ![Mou icon](http://www.climax-magazine.com/wp-content/uploads/2013/02/Glowacz_Jaeger_des_Augenblicks_2_Snapseed.jpg)
 
+>Corresponding author <patriciasalerno@gmail.com>. All materials in this repository are the Intellectual Property of **Patricia E. Salerno** and official collaborators of this project.
+
+
+
 ## general workflow
 
-**NOTE**: this workflow includes three general datasets for the two species, *Tepuihyla edelcae* and *Stefania ginesi*. The first two datasets are several libraries of ddRAD (Illumina 150bp PE) for both species, and the third dataset is Roche 454 data obtained for a single individual of *Tepuihyla edelcae*. Workflow goes from raw data to final analyses. 
+**NOTE**: this workflow includes two datasets for the species *Tepuihyla edelcae* and *Stefania ginesi*, obtained using ddRAD (Illumina 150bp PE) for both species. Workflow goes from raw data to final analyses. 
 
->Corresponding author <patriciasalerno@gmail.com>. All materials in this repository are the Intellectual Property of **Patricia E. Salerno** and official collaborators of this project.
 
 >more info on each individual workflow can be found [here](https://github.com/pesalerno/Chimanta-genomics/blob/master/README_Stefania.txt) for *Stefania* and [here](https://github.com/pesalerno/Chimanta-genomics/blob/master/README_Tepuihyla.txt) for *Tepuihyla*.
 
