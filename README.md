@@ -5,6 +5,8 @@
 ## general workflow
 
 **NOTE**: this workflow includes three general datasets for the two species, *Tepuihyla edelcae* and *Stefania ginesi*. The first two datasets are several libraries of ddRAD (Illumina 150bp PE) for both species, and the third dataset is Roche 454 data obtained for a single individual of *Tepuihyla edelcae*. Workflow goes from raw data to final analyses. Corresponding author <patriciasalerno@gmail.com>. All materials in this repository are the Intellectual Property of **Patricia E. Salerno** and official collaborators of this project.
+>more info on each individual workflow can be found [here](https://github.com/pesalerno/Chimanta-genomics/blob/master/README_Stefania.txt) for *Stefania* and [here](https://github.com/pesalerno/Chimanta-genomics/blob/master/README_Tepuihyla.txt) for *Tepuihyla*.
+
 
 ### Step 1: De-multiplexing
 
@@ -79,21 +81,13 @@ _________
 
 
 After genotyping, we first exported the SNP matrix with minimal filter in *populations*: 
-
 	
-	CHECK POPULATIONS CODE FOR BOTH SPECIES
-	
-	>>populations 
-	#!/bin/bash
-	#SBATCH cluster specific information 
-
 	populations -b 2 -P ./pop-comb-c/ -M ./pop-map-combine -fstats -k -p 1 -r 0.2  -t 8 --structure --genepop --vcf --plink --write_random_snp
-
 
 
 We filtered the SNP matrix using [PLINK](http://pngu.mgh.harvard.edu/~purcell/plink/summary.shtml) in the following way:
 
-For *Tepuihyla*, we did: 
+For *Tepuihyla*, we ran (for each flag separately): 
 
 	./plink --file input-name --geno 0.4 --mind 0.6 --maf 0.02 
 	
@@ -110,8 +104,6 @@ In *Tepuihyla*, the [resulting SNP matrix](https://github.com/pesalerno/Chimanta
 In *Stefania*, the [resulting SNP matrix](https://github.com/pesalerno/Chimanta-genomics/blob/master/Stef-NEW-c.stru) used in downstream analyses had a total missingness of 0.883727 and retained 8734 SNPs and 46 individuals.
 
  
-
-
 ###
 ###
 
@@ -134,10 +126,9 @@ We used the ***.map*** output from the last ***plink*** filter in Text Wrangler,
 	search for \d\t(\d*)_\d*\t\d\t\d*$
 	replace with \1
 
-Based the **.irem** file from the second iteration of *plink* we removed from the popmap (to use in populations input) the only  individual that did not pass **plink** filter (i.e. individuals with >50% missing data). Now we can run populations again using the whitelist of loci and the updated popmap file for loci and individuals to retain based on the plink filters. 
+Based the **.irem** file from the second iteration of *plink* we removed from the popmap (to use in populations input) the only  individual that did not pass **plink** filter (i.e. individuals with >50% missing data). 
 
-	populations -b 1 -P ./ -M ./popmap.txt  -p 1 -r 0.5 -W Pr-whitelist --write_random_snp --structure --plink --vcf --genepop --fstats --phylip
-
+	populations -b 1 -P ./denovo-03-2017 -M ./popmap-Tep.txt  -t 36 -p 1 -r 0.5 -W Tep-whitelist --write_random_snp --phylip --structure --plink --vcf --genepop --fstats
 
 ##Step XX: Obtaining maximum likelihood phylogenies with bootstraps for *Stefania* and *Tepuihyla* SNPs:
 
