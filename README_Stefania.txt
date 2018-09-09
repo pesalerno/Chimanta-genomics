@@ -199,32 +199,8 @@ do
 	cat $file | grep '^@.*' | wc -l
 done
  
-###this will print to screen sample ID (tab) number of reads. save to a file
+###this will print to screen sample ID (tab) number of reads.
 
-#file1: read-counts-Stefania.txt
-=======> NEED TO ADD READ COUNTS FOR PRELIMINARY STEFANIA LIBRARY
-
-***********************************************
-***********************************************
-###get plot of number of reads per individual in R and get mean and median number of reads
-
-##########code in R if importing only the reads files:
-
-reads <- read.table("read-counts-Stefania.txt")
-readsmatrix <- as.data.frame(reads)
-readsmatrix
-mean(readsmatrix$V2)
-##result: [1] 841618.7
-median(readsmatrix$V2)
-##result: [1] 577996.5
-plot(readsmatrix$V2)
-
-###this results in a plot of just the raw reads. Would be useful to get residuals or something.
-#####may be more informative to graph differently for downstream analyses, to check individuals	
-#####that look odd in analyses such as PCA, Structure, etc.
-
-#NOTE: LOOK AT FILE: "readcounts_scatterplot.R" TO GET MORE INFO ON GRAPHS. ADDED ABLINES FOR 
-###MEDIAN, MEAN, STDEV FOR EACH TAXON
 
 
 *******************************************************
@@ -232,8 +208,6 @@ plot(readsmatrix$V2)
 ####RUN FASTQC TO PERFORM BASIC DATA QUALITY CHECKS####
 *******************************************************
 *******************************************************
-
-##never done this! need to learn how to...
 
 
 
@@ -243,76 +217,164 @@ plot(readsmatrix$V2)
 *                                                               *
 *****************************************************************
 
-##first make output folder as named in script
-##then run denovo_map.pl as such:
+
 
 denovo_map.pl -T 8 -m 2 -M 3 -n 2 -S -b 2 -o ./priors_test_single/ -s ./Ch_319_AACCA-ATCACG.fq \
 
 
-####should look into the three flags (-m, -n, -o) and play around a bit with the inputs for them,
-#######see if they greatly affect outcomes or not. Also, should run with popmap to be able to do the 
-####### -rxhapstats that Kelly recommended (if possible).
-
-###LOOK AT FILE denovo_Stef_03_02_15.sh for details on the rest of the sequences.
 #####had to drop the five sequences that did not have any data associated to them after process_rads
 
 
 
 *****************************************************************
 *                                                               *
-*                   4.MORE QUALITY FILTERS IN R                 *
+*                   4.EXPORT AND FILTER IN PLINK                *
 *                                                               *
 *****************************************************************
 
+Exported in populations using minimal filters: 
 
-###From nick's scripts
+	look up populations code!! 
+	
 
-##>> look at the distribution of SNP position to look at potential biases
-
-##>> look at number of SNPs per "tag" (locus)
-
-##>> look at number of alleles per SNP > relevant also to Kelly's issue
-
-##>> look at minor allele frequencies... filter?
-
-##>>look at potential contaminants in BLAST
-
-####create vector for coordinates of SNPs to be removed based on above distributions. This needs
-#######to be done on a per-dataset basis. After figuring out above potential biases, then I will
-#######decide which SNPs to keep and thus modify the code below that I got from Nick.
-
-blk.coords = vector()
-# this will find tags for removal
-temp=substr(Bbi.all@loc.names,
-            data.frame(matrix(unlist(gregexpr("_",Bbi.all@loc.names)), byrow=T))[,1],
-            nchar(Bbi.all@loc.names))
-blk.coords=which(temp%in%blk.list)     
-
-# this will find snps for removal
-temp=substr(Bbi.all@loc.names,
-            1,
-            data.frame(matrix(unlist(gregexpr("_",Bbi.all@loc.names)), byrow=T))[,1])
-blk.coords=c(blk.coords,which(temp%in%blk.list))
-
-length(blk.coords)             #this will remove 33090 of 86210 loci
-head(Bbi.all@loc.names[blk.coords],25)  #check to be sure loci identified match black list
-tail(Bbi.all@loc.names[blk.coords],25)
-Bbi.a=Bbi.all[,loc=names(Bbi.all@loc.names[-blk.coords])]   #this is the subset of the data without the blacklisted loci
-
-###Test for LD among loci??
-###Test for HWE??
+The used plink to filter sequentially first for loci with too much missing data, then individuals with too much missing data, then by minor allele frequency < 0.02.
 
 
+@----------------------------------------------------------@
+|        PLINK!       |     v1.07      |   10/Aug/2009     |
+|----------------------------------------------------------|
+|  (C) 2009 Shaun Purcell, GNU General Public License, v2  |
+|----------------------------------------------------------|
+|  For documentation, citation & bug-report instructions:  |
+|        http://pngu.mgh.harvard.edu/purcell/plink/        |
+@----------------------------------------------------------@
 
-######RE-RUN STACKS?? ==> can re-run stacks with population info and flag -rxhapstats so that it'll take
-##########################population haplotype data and stats into account when filtering out SNPs (from Kelly)
+Skipping web check... [ --noweb ] 
+Writing this text to log file [ Stef-NEW-a.log ]
+Analysis started: Tue Apr  4 11:09:54 2017
+
+Options in effect:
+	--file Stef-04-04
+	--geno 0.4
+	--recode
+	--out Stef-NEW-a
+	--noweb
+
+51504 (of 51504) markers to be included from [ Stef-04-04.map ]
+Warning, found 60 individuals with ambiguous sex codes
+Writing list of these individuals to [ Stef-NEW-a.nosex ]
+60 individuals read from [ Stef-04-04.ped ] 
+0 individuals with nonmissing phenotypes
+Assuming a disease phenotype (1=unaff, 2=aff, 0=miss)
+Missing phenotype value is also -9
+0 cases, 0 controls and 60 missing
+0 males, 0 females, and 60 of unspecified sex
+Before frequency and genotyping pruning, there are 51504 SNPs
+60 founders and 0 non-founders found
+Total genotyping rate in remaining individuals is 0.390462
+40366 SNPs failed missingness test ( GENO > 0.4 )
+0 SNPs failed frequency test ( MAF < 0 )
+After frequency and genotyping pruning, there are 11138 SNPs
+After filtering, 0 cases, 0 controls and 60 missing
+After filtering, 0 males, 0 females, and 60 of unspecified sex
+Writing recoded ped file to [ Stef-NEW-a.ped ] 
+Writing new map file to [ Stef-NEW-a.map ] 
+
+Analysis finished: Tue Apr  4 11:09:58 2017
+
+
+@----------------------------------------------------------@
+|        PLINK!       |     v1.07      |   10/Aug/2009     |
+|----------------------------------------------------------|
+|  (C) 2009 Shaun Purcell, GNU General Public License, v2  |
+|----------------------------------------------------------|
+|  For documentation, citation & bug-report instructions:  |
+|        http://pngu.mgh.harvard.edu/purcell/plink/        |
+@----------------------------------------------------------@
+
+Skipping web check... [ --noweb ] 
+Writing this text to log file [ Stef-NEW-b.log ]
+Analysis started: Tue Apr  4 11:10:48 2017
+
+Options in effect:
+	--file Stef-NEW-a
+	--mind 0.5
+	--recode
+	--out Stef-NEW-b
+	--noweb
+
+11138 (of 11138) markers to be included from [ Stef-NEW-a.map ]
+Warning, found 60 individuals with ambiguous sex codes
+Writing list of these individuals to [ Stef-NEW-b.nosex ]
+60 individuals read from [ Stef-NEW-a.ped ] 
+0 individuals with nonmissing phenotypes
+Assuming a disease phenotype (1=unaff, 2=aff, 0=miss)
+Missing phenotype value is also -9
+0 cases, 0 controls and 60 missing
+0 males, 0 females, and 60 of unspecified sex
+Before frequency and genotyping pruning, there are 11138 SNPs
+60 founders and 0 non-founders found
+Writing list of removed individuals to [ Stef-NEW-b.irem ]
+14 of 60 individuals removed for low genotyping ( MIND > 0.5 )
+Total genotyping rate in remaining individuals is 0.883727
+0 SNPs failed missingness test ( GENO > 1 )
+0 SNPs failed frequency test ( MAF < 0 )
+After frequency and genotyping pruning, there are 11138 SNPs
+After filtering, 0 cases, 0 controls and 46 missing
+After filtering, 0 males, 0 females, and 46 of unspecified sex
+Writing recoded ped file to [ Stef-NEW-b.ped ] 
+Writing new map file to [ Stef-NEW-b.map ] 
+
+Analysis finished: Tue Apr  4 11:10:49 2017
+
+@----------------------------------------------------------@
+|        PLINK!       |     v1.07      |   10/Aug/2009     |
+|----------------------------------------------------------|
+|  (C) 2009 Shaun Purcell, GNU General Public License, v2  |
+|----------------------------------------------------------|
+|  For documentation, citation & bug-report instructions:  |
+|        http://pngu.mgh.harvard.edu/purcell/plink/        |
+@----------------------------------------------------------@
+
+Skipping web check... [ --noweb ] 
+Writing this text to log file [ Stef-NEW-c.log ]
+Analysis started: Tue Apr  4 11:11:16 2017
+
+Options in effect:
+	--file Stef-NEW-b
+	--maf 0.02
+	--recode
+	--out Stef-NEW-c
+	--noweb
+
+11138 (of 11138) markers to be included from [ Stef-NEW-b.map ]
+Warning, found 46 individuals with ambiguous sex codes
+Writing list of these individuals to [ Stef-NEW-c.nosex ]
+46 individuals read from [ Stef-NEW-b.ped ] 
+0 individuals with nonmissing phenotypes
+Assuming a disease phenotype (1=unaff, 2=aff, 0=miss)
+Missing phenotype value is also -9
+0 cases, 0 controls and 46 missing
+0 males, 0 females, and 46 of unspecified sex
+Before frequency and genotyping pruning, there are 11138 SNPs
+46 founders and 0 non-founders found
+Total genotyping rate in remaining individuals is 0.883727
+0 SNPs failed missingness test ( GENO > 1 )
+2404 SNPs failed frequency test ( MAF < 0.02 )
+After frequency and genotyping pruning, there are 8734 SNPs
+After filtering, 0 cases, 0 controls and 46 missing
+After filtering, 0 males, 0 females, and 46 of unspecified sex
+Writing recoded ped file to [ Stef-NEW-c.ped ] 
+Writing new map file to [ Stef-NEW-c.map ] 
+
+Analysis finished: Tue Apr  4 11:11:17 2017
 
 
 
 
 *****************************************************************
 *                                                               *
-*     5.FINAL SNP MATRIX CLEAN-UP AND EXPORT IN VCF TOOLS       *
+*  					   5.DOWNSTREAM ANALYSES                    *
 *                                                               *
 *****************************************************************
 
