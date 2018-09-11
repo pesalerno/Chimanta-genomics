@@ -80,7 +80,7 @@ After exploring our dataset by running a few combinations of parameters -m, -n, 
 
 _________
 
-### Step 2: Filtering the SNP matrix.
+### Step 3: Filtering the SNP matrix.
 
 
 After genotyping, we first exported the SNP matrix with minimal filter in *populations*: 
@@ -107,14 +107,11 @@ In *Tepuihyla*, the [resulting SNP matrix](https://github.com/pesalerno/Chimanta
 In *Stefania*, the [resulting SNP matrix](https://github.com/pesalerno/Chimanta-genomics/blob/master/Stef-NEW-c.stru) used in downstream analyses had a total missingness of 0.883727 and retained 8734 SNPs and 46 individuals.
 
  
-###
-###
 
-###Obtaining population stats using the program **populations** with a whitelist of loci and individuals that passed filters
+
+>Obtaining population stats using the program **populations** with a whitelist of loci and individuals that passed filters
 
 	
-
-
 In order to get the *populations* stats outputs from STACKS, we re-ran populations using a whitelist, which requires file that only has the locis ID and excludes the SNP position ID. Thus, only the first string before the underscore needs to be kept. The whitelist file format is ordered as a simple text file containing one catalog locus per line: 
 
 		3
@@ -133,14 +130,30 @@ Based the **.irem** file from the second iteration of *plink* we removed from th
 
 	populations -b 1 -P ./denovo-03-2017 -M ./popmap-Tep.txt  -t 36 -p 1 -r 0.5 -W Tep-whitelist --write_random_snp --phylip --structure --plink --vcf --genepop --fstats
 
-##Step 3: Structure and population estimates in adegenet
+#Step 4: Structure and population estimates in adegenet
 
 We ran Principal Components and Discriminant Analyses using **adegenet**, and obtained some population measures using the package **hierfstat** in R. 
 
 > The code used for adegenet and hierfstat analyses can be found [here](https://github.com/pesalerno/Chimanta-genomics/blob/master/adegenet-Tepuihyla-NEW.R) for *Tepuihyla* and [here](https://github.com/pesalerno/Chimanta-genomics/blob/master/adegenet-Stefania-NEW-b.R) for *Stefania*.
 
 
-##Step 4: Obtaining maximum likelihood phylogenies with bootstraps for *Stefania* and *Tepuihyla* SNPs:
+#Step 5: Obtaining maximum likelihood phylogenies for all datasets. 
+
+To obtain SNP phylogenies with bootstraps for *Stefania* and *Tepuihyla*:
 
 	./raxml-ng --all --msa Stef-NEW-c.phylip.txt --model GTR+G --tree pars {10} --bs-trees 200
 
+
+To obtain mitochondrial phylogenies with bootstraps for *Stefania* and *Tepuihyla*:
+
+	./raxmlHPC -m GTRGAMMA -m 12345 -# 20 -s inputname.phy -n outputname
+
+>the above code does 20 ML searches and finds the best tree
+
+	./raxmlHPC -m GTRGAMMA -p 12345 -b 12345 -# 1000 -s inputname.phy -n outputname
+
+>the above code runs 1000 bootstraps
+
+	./raxmlHPC -m GTRCAT -p 12345 -f b -t besttree -z bootstraps -n outputname 
+
+>the above code writes the bootstraps onto the best likelihood tree. 
