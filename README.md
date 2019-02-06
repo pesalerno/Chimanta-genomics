@@ -107,7 +107,13 @@ In *Tepuihyla*, the [resulting SNP matrix](https://github.com/pesalerno/Chimanta
 In *Stefania*, the [resulting SNP matrix](https://github.com/pesalerno/Chimanta-genomics/blob/master/Stef-NEW-c.stru) used in downstream analyses had a total missingness of 0.883727 and retained 8734 SNPs and 46 individuals.
 
  
+###
+###
+Filtering out outlier loci
+We ran PCAdapt for Stefania and for Tepuihyla using the code attached using this code and found only 12 outliers (using K=2). PCAdapt outputs the "order" of the loci rather than the IDs of the loci themselves, so to exclude the outliers we generated a blacklist like this:
 
+awk '{print $2495,$2800,$5456,$5556,$7894,$8230,$8875,$10204,$11417,$11493,$12255,$12277}' puma-FINAL.stru > blacklist-PCAdapt-b
+Which generates a line of the loci, then doing find "space" and replace with "new line" (\n) we obtained our final blacklist file for excluding SNPs based on PCAdapt.
 
 >Obtaining population stats using the program **populations** with a whitelist of loci and individuals that passed filters
 
