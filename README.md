@@ -126,7 +126,7 @@ Whitelists in populations require files only have the locis ID and exclude the S
 		11
 		46
 
-First, we **generated the whitelists of the adaptive loci** directly from the PCAdapt outputs for Stefania nd Tepuihyla. In tepuihyla, 308 out of 4751 loci were found to be putatively adaptive. In Stefania, XX out of XX were found to be putatively adaptive. 
+First, we **generated the whitelists of the adaptive loci** directly from the PCAdapt outputs for Stefania and Tepuihyla. In Tepuihyla, 308 out of 4751 loci were found to be putatively adaptive. In Stefania, 680 out of 8722 loci were found to be putatively adaptive. 
 
 
 PCAdapt outputs the "order" of the loci rather than the IDs of the loci themselves, so to exclude the outliers we generated a blacklist like this:
