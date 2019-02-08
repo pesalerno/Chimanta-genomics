@@ -16,7 +16,7 @@ myFile <- import2genind("Stef-NEW_AB-c.stru") ##8734 SNPs and 8 inds (After ouli
 myFile <- import2genind("Stef-NEW_CH-c.stru") ##8734 SNPs and 16 inds (After oulier removed)
 myFile <- import2genind("Stef-NEW_ER-c.stru") ##8734 SNPs and 22 inds (After oulier removed)
 
-
+myFile <- import2genind("Tep_adaptive_CHI.stru") ##8734 SNPs and 22 inds (After oulier removed)
 
 
 ##QUESTIONS:
