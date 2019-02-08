@@ -162,14 +162,14 @@ Based the **.irem** file from the second iteration of *plink* we also removed po
 
 	populations -b 1 -P ./denovo-03-2017 -M ./popmap-Tep.txt  -t 36 -p 1 -r 0.5 -W Tep-whitelist --write_random_snp --phylip --structure --plink --vcf --genepop --fstats
 
-###Step 4: Structure and population estimates in adegenet
+### Step 4: Structure and population estimates in adegenet
 
 We ran Principal Components and Discriminant Analyses using **adegenet**, and obtained some population measures using the package **hierfstat** in R. 
 
 > The code used for adegenet and hierfstat analyses can be found [here](https://github.com/pesalerno/Chimanta-genomics/blob/master/adegenet-Tepuihyla-NEW.R) for *Tepuihyla* and [here](https://github.com/pesalerno/Chimanta-genomics/blob/master/adegenet-Stefania-NEW-b.R) for *Stefania*.
 
 
-###Step 5: Obtaining maximum likelihood phylogenies for all datasets. 
+### Step 5: Obtaining maximum likelihood phylogenies for all datasets. 
 
 To obtain SNP phylogenies with bootstraps for *Stefania* and *Tepuihyla*:
 
