@@ -1,7 +1,5 @@
 # Chimantá Genomics
 
-![Mou icon](http://www.climax-magazine.com/wp-content/uploads/2013/02/Glowacz_Jaeger_des_Augenblicks_2_Snapseed.jpg)
-
 >Corresponding author <patriciasalerno@gmail.com>. All materials in this repository are the Intellectual Property of **Patricia E. Salerno** and official collaborators of this project.
 
 
@@ -102,14 +100,10 @@ For *Stefania*, we did:
 In both cases, filtering parameters were based on the combination that increased the amount of individuals and SNPs retained in all populations. 
 
 
-In *Tepuihyla*, the [resulting SNP matrix](https://github.com/pesalerno/Chimanta-genomics/blob/master/Tep-04-02-c.stru) used in downstream analyses had a total missingness of 0.885012 and retained 4776 SNPs and 71 individuals. 
+In *Tepuihyla*, the [resulting SNP matrix](https://github.com/pesalerno/Chimanta-genomics/blob/master/Tepuihyla.stru) used in downstream analyses had a total missingness of 0.885012 and retained 4776 SNPs and 71 individuals. 
 
-In *Stefania*, the [resulting SNP matrix](https://github.com/pesalerno/Chimanta-genomics/blob/master/Stef-NEW-c.stru) used in downstream analyses had a total missingness of 0.883727 and retained 8734 SNPs and 46 individuals.
+In *Stefania*, the [resulting SNP matrix](https://github.com/pesalerno/Chimanta-genomics/blob/master/Stefania.stru) used in downstream analyses had a total missingness of 0.883727 and retained 8734 SNPs and 46 individuals.
 
-	>Correct matrices!!! (they have excluded individuals still in there)
- 
-###
-###
 
 
 >Obtaining population stats using the program **populations** with a whitelist of loci and individuals that passed filters
@@ -161,6 +155,8 @@ We then used the ***.map*** output from ***plink*** in Text Wrangler, and genera
 Based the **.irem** file from the second iteration of *plink* we also removed poorly genotyped individuals (that did not pass plink filter) from the popmap to use in populations input (i.e. individuals with >50% missing data). 
 
 	populations -b 1 -P ./denovo-03-2017 -M ./popmap-Tep.txt  -t 36 -p 1 -r 0.5 -W Tep-whitelist --write_random_snp --phylip --structure --plink --vcf --genepop --fstats
+
+Here are the final *Stefania* [adaptive](https://github.com/pesalerno/Chimanta-genomics/blob/master/Stef_adaptive.stru) and [neutral](https://github.com/pesalerno/Chimanta-genomics/blob/master/Stef_neutral.stru) matrices, and the *Tepuihyla* [adaptive](https://github.com/pesalerno/Chimanta-genomics/blob/master/Tep_adaptive.stru) and [neutral](https://github.com/pesalerno/Chimanta-genomics/blob/master/Tep_neutral.stru) matrices. 
 
 ### Step 4: Structure and population estimates in adegenet
 
