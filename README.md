@@ -162,7 +162,7 @@ Here are the final *Stefania* [adaptive](https://github.com/pesalerno/Chimanta-g
 
 We ran Principal Components and Discriminant Analyses using **adegenet**, and obtained some population measures using the package **hierfstat** in R. 
 
-> The code used for adegenet and hierfstat analyses can be found [here](https://github.com/pesalerno/Chimanta-genomics/blob/master/adegenet-Tepuihyla-NEW.R) for *Tepuihyla* and [here](https://github.com/pesalerno/Chimanta-genomics/blob/master/adegenet-Stefania-NEW-b.R) for *Stefania*.
+> The code used for adegenet and hierfstat analyses can be found [here](https://github.com/pesalerno/Chimanta-genomics/blob/master/adegenet-Tep-neutral-adaptive.R) for *Tepuihyla* and [here](https://github.com/pesalerno/Chimanta-genomics/blob/master/adegenet-Stefania-NEW-b.R) for *Stefania*.
 
 
 ### Step 5: Obtaining maximum likelihood phylogenies for all datasets. 
