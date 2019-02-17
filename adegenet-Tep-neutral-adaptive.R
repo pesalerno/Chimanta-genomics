@@ -7,17 +7,11 @@ library("hierfstat")
 
 
 
-myFile <- import2genind("Tep-04-02-z.stru") ##4776 SNPs and 71 inds (After oulier removed)
-myFile
 
 
-####by island####
-myFile <- import2genind("Tep-04-02-c3-no-AU.stru") ##1118 SNPs and 64 inds (After oulier removed)
-myFile <- import2genind("Tep-04-02-c3-ER.stru") ##1118 SNPs and 33 inds (After oulier removed)
-myFile <- import2genind("Tep-short-AB-c.stru") ##4758 SNPs and 16 inds (After oulier removed)
-myFile <- import2genind("Tep-04-02-c3-CH.stru") ##1118 SNPs and 15 inds (After oulier removed)
-myFile <- import2genind("Tep-04-02-c3-AU.stru") ##1118 SNPs and 7 inds (After oulier removed)
+myFile <- import2genind("Tep_neutral_CHI-b.stru") ##4394 SNPs and 63 inds (After oulier removed)
 
+myFile <- import2genind("Tep_adaptive_CHI.stru") ##307 SNPs and 64 inds (After oulier removed)
 
 
 ##QUESTIONS:
@@ -45,7 +39,7 @@ names(myFile)
 
 ########################
 
-X <- scaleGen(myFile, NA.method="mean")
+X <- scaleGen(myFile, NA.method="zero")
 X[1:5,1:5]
 
 help('scaleGen')
@@ -67,7 +61,7 @@ library(ggplot2)
 plot_data<-as.data.frame(pca1$li)
 plot_data$group<-pop(myFile)
 ggplot(plot_data,aes(x=Axis1,y=Axis2,col=group))+geom_point()+
-stat_ellipse()+theme_bw()+xlab("PC1")+scale_colour_manual(values=c("red", "grey", "darkgreen",  "royalblue4"))
+stat_ellipse()+theme_bw()+xlab("PC1")+scale_colour_manual(values=c("red", "darkgreen",  "royalblue4"))
 histo<-data.frame(variation=pca1$eig[1:30],axes=1:30)
 ggplot(histo,aes(x=axes,y=variation))+geom_bar(stat="identity")+theme_bw()
 
@@ -123,9 +117,9 @@ contrib<-loadingplot(dapc2$var.contr,axis=2,thres=.07,lab.jitter=1)
 plot_dapc<-as.data.frame(dapc2$ind.coord)
 plot_dapc$group=pop(myFile)
 
-ggplot(plot_dapc,aes(x=LD2,y=LD3,col=group))+geom_point()+
-stat_ellipse()+theme_bw()+xlab("LD2")+scale_colour_manual(values=c("red", "grey", "darkgreen",  "royalblue4"))
-eig<-data.frame(eigs=dapc1$eig,LDs=1:2)
+ggplot(plot_dapc,aes(x=LD1,y=LD2,col=group))+geom_point()+
+stat_ellipse()+theme_bw()+xlab("LD1")+scale_colour_manual(values=c("red", "darkgreen",  "royalblue4"))
+eig<-data.frame(eigs=dapc2$eig,LDs=1:2)
 ggplot(eig,aes(x=LDs,y=eigs))+geom_bar(stat='identity')+
 theme_bw()
 
@@ -150,23 +144,22 @@ basicstat<-basic.stats(myFile, diploid=TRUE)
 basicstat
 Hobs<-basicstat$Ho
 Hobs
-write(Hobs, file="Tep-Hobs-04-04.txt", ncol=4)
+write(Hobs, file="Stef-Hobs-04-04.txt", ncol=3)
 
 Hexp<-basicstat$Hs
 Hexp
-write(Hexp, file="Tep-Hexp-04-04.txt", ncol=4)
+write(Hexp, file="Stef-Hexp-04-04.txt", ncol=3)
 
 Fis<-basicstat$Fis
 Fis
-write(Fis, file="Tep-Fis-04-04.txt", ncol=4)
+write(Fis, file="Stef-Fis-04-04.txt", ncol=3)
 
 bartlett.test(list(basicstat$Hs, basicstat $Ho)) ##this gives you a statistical
 ##measure of whether observed and expected heterozygosity are different
 
-??'basicstat'
 
 library(diveRsity)
-divBasic(infile="Tep-04-02-z.gnp.txt", outfile="Tep-04-02-diversity", gp=2, bootstraps=NULL, HWEexact=FALSE)
+divBasic(infile="Stef-NEW-c.gnp.txt", outfile="Stef-diversity", gp=2, bootstraps=NULL, HWEexact=FALSE)
 
 ##########################################
 ###  PAIRWISE Fst WITH BOOTSTRAPPING   ###
@@ -186,7 +179,7 @@ pairwise.fst(myFile)
 ###################################################
 library(strataG)
 ##transform file from genind to gtypes
-myFile3<-genind2gtypes(myFile)
+myFile3<-genind2gtypes(myFile2)
 
 myFile3 ##summaries of heterozygosity per population/strata
 
@@ -214,20 +207,7 @@ myFile3 ##summaries of heterozygosity per population/strata
 ###               popGENOME PACKAGE               ###
 ###################################################
 
-library(PopGenome)
-
-diversity.stats(object, new.populations=FALSE, subties=FALSE)
-
-##slots>>
-nuc.diversity.within ##nuc. diversity within population
-Pi ##Nei diversity within pop
-hap.diversity.within ##hap diveristy within pop
-
-F_ST.stats(object, new.populations=FALSE, subsites=FALSE, detail=TRUE, mode="ALL", only.haplotype.counts=FALSE, FAST=FALSE)
-
-
-get.diversity(object, between=FALSE)
-get.F_ST(object, mode=FALSE, pairwise=FALSE)
+##library(PopGenome)
 
 
 

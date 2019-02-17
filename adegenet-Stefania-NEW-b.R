@@ -7,16 +7,8 @@ library("hierfstat")
 
 
 
-myFile <- import2genind("Stef-NEW-c.stru") ##8734 SNPs and 46 inds (After oulier removed)
-myFile
-
-
-####by island####
-myFile <- import2genind("Stef-NEW_AB-c.stru") ##8734 SNPs and 8 inds (After oulier removed)
-myFile <- import2genind("Stef-NEW_CH-c.stru") ##8734 SNPs and 16 inds (After oulier removed)
-myFile <- import2genind("Stef-NEW_ER-c.stru") ##8734 SNPs and 22 inds (After oulier removed)
-
-myFile <- import2genind("Tep_adaptive_CHI.stru") ##8734 SNPs and 22 inds (After oulier removed)
+myFile <- import2genind("Stef-neutral.stru") ##8019 SNPs and 46 inds 
+myFile <- import2genind("Stef-adaptive.stru") ##675 SNPs and 46 inds 
 
 
 ##QUESTIONS:
