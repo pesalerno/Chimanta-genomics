@@ -105,6 +105,8 @@ In *Tepuihyla*, the [resulting SNP matrix](https://github.com/pesalerno/Chimanta
 In *Stefania*, the [resulting SNP matrix](https://github.com/pesalerno/Chimanta-genomics/blob/master/Stefania.stru) used in downstream analyses had a total missingness of 0.883727 and retained 8734 SNPs and 46 individuals.
 
 
+For demographic analyses, we filtered in plink with --maf 0.05 
+
 
 >Obtaining population stats using the program **populations** with a whitelist of loci and individuals that passed filters
 
@@ -169,7 +171,7 @@ We ran Principal Components and Discriminant Analyses using **adegenet**, and ob
 
 To obtain SNP phylogenies with bootstraps for *Stefania* and *Tepuihyla*:
 
-	./raxml-ng --all --msa Stef-NEW-c.phylip.txt --model GTR+G --tree pars {10} --bs-trees 200
+	./raxml-ng --all --msa Stef-NEW-c.phylip.txt --model GTR+G --tree pars {10} --bs-trees 500
 
 
 To obtain mitochondrial phylogenies with bootstraps for *Stefania* and *Tepuihyla*:
